@@ -1,21 +1,44 @@
 import data from './deno.json' with { type: 'json' };
 
+/**
+ * Current version of this module.
+ */
 export const VERSION = data.version;
 
+/**
+ * CheckItem represents a single check item with a name, an optional command to execute,
+ */
 export type CheckItem = {
+  /** The name of the check item. */
   name: string;
+  /**
+   * The command to execute for this check item.
+   * If not provided, the `after` function will be called directly.
+   */
   command?: string[];
+  /**
+   * A function that will be called after the command is executed.
+   * It receives the result of the command execution and should return a message or void.
+   */
   after: (
     result: ExecResult,
   ) => Promise<string | void>;
 };
 
+/**
+ * ExecResult represents the result of executing a command.
+ */
 export type ExecResult = {
   code: number;
   stdout: string;
   stderr: string;
 };
 
+/**
+ * Executes a command and returns the result.
+ * @param command The command to execute.
+ * @returns ExecResult containing the exit code, standard output, and standard error.
+ */
 export async function exec(command: string[]): Promise<ExecResult> {
   const { code, stdout, stderr } = await new Deno.Command(
     command.shift() as string,
@@ -59,6 +82,10 @@ function versionCheck(nowTag: string, noeVer: string) {
   return false;
 }
 
+/**
+ * Creates a Deno version checker that checks if the current Deno version is the latest stable version.
+ * @returns A CheckItem that checks the Deno version.
+ */
 export function createDenoVersionChecker(): CheckItem {
   return {
     name: 'Deno version check',
@@ -85,6 +112,12 @@ export function createDenoVersionChecker(): CheckItem {
   };
 }
 
+/**
+ * Creates a version checker that checks if the current version is updated.
+ * Current version is latest tag in git.(Format: v1.2.3)
+ * @param version The version to check against the latest version.(Format 1.2.3)
+ * @returns A CheckItem that checks the version.
+ */
 export function createVersionChecker(version: string): CheckItem {
   return {
     name: 'VERSION check',
@@ -102,6 +135,10 @@ export function createVersionChecker(version: string): CheckItem {
   };
 }
 
+/**
+ * Creates a JSR publish checker that checks if the current module is ready for publishing.
+ * @returns A CheckItem that checks the JSR publish status.
+ */
 export function createJsrPublishChecker(): CheckItem {
   return {
     name: 'JSR Publish check',
@@ -115,6 +152,10 @@ export function createJsrPublishChecker(): CheckItem {
   };
 }
 
+/**
+ * Executes a series of checks defined in the provided list.
+ * @param list The list of check items to execute.
+ */
 export async function check(...list: CheckItem[]) {
   for (const check of list) {
     start(check.name);
