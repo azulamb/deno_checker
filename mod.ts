@@ -6,11 +6,17 @@ export type CheckItem = {
   name: string;
   command?: string[];
   after: (
-    result: { code: number; stdout: string; stderr: string },
+    result: ExecResult,
   ) => Promise<string | void>;
 };
 
-export async function exec(command: string[]) {
+export type ExecResult = {
+  code: number;
+  stdout: string;
+  stderr: string;
+};
+
+export async function exec(command: string[]): Promise<ExecResult> {
   const { code, stdout, stderr } = await new Deno.Command(
     command.shift() as string,
     {
