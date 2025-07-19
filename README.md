@@ -2,15 +2,23 @@
 
 https://jsr.io/@azulamb/checker
 
+A library for performing pre-release checks.
+
 ## Sample
 
 ```ts
 import * as checker from "jsr:@azulamb/checker";
-import data from './deno.json' with { type: 'json' };
+import data from '../deno.json' with { type: 'json' };
 
 await checker.check(
-  checker.DenoVersionCheck(),
-  checker.VersionCheck(data.version),
-  checker.JsrPublishCheck(),
+  checker.createDenoVersionChecker(),
+  checker.createVersionChecker(data.version),
+  checker.createJsrPublishChecker(),
 );
 ```
+
+### createVersionChecker
+
+Need `git` command.
+
+If set tag `v[X].[Y].[Z]`, compare version `[X].[Y].[Z]`.
