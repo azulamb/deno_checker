@@ -46,10 +46,10 @@ function complete(message: string) {
 
 function versionCheck(nowTag: string, noeVer: string) {
   const v1 = nowTag.split('.').map((v) => {
-    return parseInt(v);
+    return parseInt(v.replace(/[^0-9]+/g, ''));
   });
   const v2 = noeVer.split('.').map((v) => {
-    return parseInt(v);
+    return parseInt(v.replace(/[^0-9]+/g, ''));
   });
   for (let i = 0; i < 3; ++i) {
     if (v1[i] < v2[i]) {
