@@ -1,0 +1,17 @@
+{
+  "name": "@azulamb/checker",
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": "./mod.ts",
+  "lock": false,
+  "tasks": {
+    "check": "deno run --allow-run --allow-read --allow-net ./mod.ts"
+  },
+  "lint": {
+    "include": ["./"]
+  },
+  "fmt": {
+    "include": ["./"],
+    "singleQuote": true
+  }
+}
