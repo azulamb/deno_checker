@@ -7,7 +7,7 @@ A library for performing pre-release checks.
 ## Sample
 
 ```ts
-import * as checker from "jsr:@azulamb/checker";
+import * as checker from 'jsr:@azulamb/checker';
 import data from '../deno.json' with { type: 'json' };
 
 await checker.check(

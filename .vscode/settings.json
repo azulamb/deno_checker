@@ -1,5 +1,8 @@
 {
   "deno.enablePaths": [
     "./"
+  ],
+  "cSpell.words": [
+    "azulamb"
   ]
 }

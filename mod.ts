@@ -67,11 +67,20 @@ function complete(message: string) {
   console.log(`%c${message}`, 'color: green');
 }
 
-function versionCheck(nowTag: string, noeVer: string) {
-  const v1 = nowTag.split('.').map((v) => {
+/**
+ * Checks if the current version is updated.
+ * @param nowVersion The current version.
+ * @param newVersion The new version to check against.
+ * @returns True if the current version is updated, false otherwise.
+ */
+export function isUpdatedVersion(
+  nowVersion: string,
+  newVersion: string,
+): boolean {
+  const v1 = nowVersion.split('.').map((v) => {
     return parseInt(v.replace(/[^0-9]+/g, ''));
   });
-  const v2 = noeVer.split('.').map((v) => {
+  const v2 = newVersion.split('.').map((v) => {
     return parseInt(v.replace(/[^0-9]+/g, ''));
   });
   for (let i = 0; i < 3; ++i) {
@@ -125,7 +134,7 @@ export function createVersionChecker(version: string): CheckItem {
     after: (result) => {
       return Promise.resolve(result.stdout.replace(/\s/g, '')).then((tag) => {
         console.log(`Now tag: ${tag} Now ver: ${version}`);
-        if (!versionCheck(tag, version)) {
+        if (!isUpdatedVersion(tag, version)) {
           throw new Error(
             'VERSION is not updated. Update deno.json & deno task version',
           );
