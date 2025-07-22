@@ -127,7 +127,12 @@ export function createDenoVersionChecker(): CheckItem {
  * @param version The version to check against the latest version.(Format 1.2.3)
  * @returns A CheckItem that checks the version.
  */
-export function createVersionChecker(version: string): CheckItem {
+export function createVersionChecker(
+  version: string,
+  error?: {
+    isNotUpdated?: string;
+  },
+): CheckItem {
   return {
     name: 'VERSION check',
     command: ['git', 'describe', '--tags', '--abbrev=0'],
@@ -136,7 +141,8 @@ export function createVersionChecker(version: string): CheckItem {
         console.log(`Now tag: ${tag} Now ver: ${version}`);
         if (!isUpdatedVersion(tag, version)) {
           throw new Error(
-            'VERSION is not updated. Update deno.json & deno task version',
+            error?.isNotUpdated ||
+              'VERSION is not updated. Update deno.json.',
           );
         }
       });
